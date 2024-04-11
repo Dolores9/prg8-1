@@ -1,0 +1,27 @@
+{
+  "name": "school",
+  "version": "1.0.0",
+  "description": "prg8-1",
+  "main": "server",
+  "scripts": {
+    "test": "hoi",
+    "dev": "nodemon --env-file .env server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "prg8-2024"
+  },
+  "author": "dolores",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/openai": "^0.0.27",
+    "express": "^4.19.2",
+    "langchain": "^0.1.32",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+  
+}
