@@ -1,3 +1,5 @@
+let chatHistory = [];
+
 async function interpretInput() {
     const textInput = document.getElementById("textInput").value;
 
@@ -6,33 +8,32 @@ async function interpretInput() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: textInput })
+        body: JSON.stringify({ text: textInput, chatHistory })
     });
 
     const data = await response.json();
 
     if (data.success) {
-        // Update de UI met de reactie van de server
-        alert(data.message); // Toon een melding van het succesvol interpreteren
-        updateTodoList(); // Werk de to-do lijst bij
+        // Update de chatgeschiedenis met het antwoord van de server
+        const responseText = data.response;
+        addToChatHistory(responseText);
+        updateChatUI();
     } else {
-        alert(data.message); // Toon een foutmelding als interpretatie mislukt
+        alert(data.message); // Toon een foutmelding als er een probleem optreedt
     }
 }
 
-async function updateTodoList() {
-    const response = await fetch('/todolist');
-    const data = await response.json();
-
-    const taskList = document.getElementById("taskList");
-    taskList.innerHTML = '';
-
-    data.todoList.forEach(task => {
-        const li = document.createElement("li");
-        li.textContent = task;
-        taskList.appendChild(li);
-    });
+function addToChatHistory(message) {
+    chatHistory.push(message);
 }
 
-// Laad de to-do lijst bij het starten van de applicatie
-updateTodoList();
+function updateChatUI() {
+    const chatContainer = document.getElementById("chatContainer");
+    chatContainer.innerHTML = '';
+
+    chatHistory.forEach(message => {
+        const div = document.createElement("div");
+        div.textContent = message;
+        chatContainer.appendChild(div);
+    });
+}

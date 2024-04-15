@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRG8 Opdracht 1</title>
+    <title>Game Expert Chatbot</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>To-Do List</h1>
-        <input type="text" id="taskInput" placeholder="Voeg een nieuwe taak toe...">
-        <button onclick="addTask()">Toevoegen</button>
-        <ul id="taskList"></ul>
+        <h1>Game Expert Chatbot</h1>
+        <div id="chatContainer" class="chat-container"></div>
+        <input type="text" id="textInput" placeholder="Stel je vraag...">
+        <button onclick="interpretInput()">Verstuur</button>
     </div>
 
     <script src="script.js"></script>

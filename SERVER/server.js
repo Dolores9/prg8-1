@@ -12,37 +12,29 @@ const model = new ChatGPT({
     azureOpenAIApiDeploymentName: process.env.ENGINE_NAME, 
 });
 
-let todoList = [];
+let chatHistory = []; // Houdt de chatgeschiedenis bij
 
 app.use(bodyParser.json());
 
 app.post('/interpret', async (req, res) => {
     try {
         const { text } = req.body;
-        const response = await model.interpret(text);
 
-        if (response.intent === "AddTask") {
-            const task = response.entities.join(" ");
-            todoList.push(task);
-            res.json({ success: true, message: `Taak "${task}" is toegevoegd aan de lijst.` });
-        } else if (response.intent === "RemoveTask") {
-            const task = response.entities.join(" ");
-            todoList = todoList.filter(item => !item.includes(task));
-            res.json({ success: true, message: `Taak "${task}" is verwijderd van de lijst.` });
-        } else {
-            res.json({ success: false, message: "Sorry, ik begrijp niet wat je bedoelt." });
-        }
+        // Voeg het nieuwe bericht toe aan de chatgeschiedenis
+        chatHistory.push(text);
+
+        // Geef de hele chatgeschiedenis door aan het taalmodel
+        const response = await model.interpret(text, { chatHistory });
+
+        // Voeg het antwoord van de AI toe aan de chatgeschiedenis
+        chatHistory.push(response);
+
+        res.json({ success: true, response });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ success: false, message: 'Interne serverfout' });
     }
 });
-
-app.get('/todolist', (req, res) => {
-    res.json({ todoList });
-});
-
-app.use(express.static('public')); // Serveer de statische bestanden (HTML, CSS, JS)
 
 app.listen(port, () => {
     console.log(`Server draait op http://localhost:${port}/`);
